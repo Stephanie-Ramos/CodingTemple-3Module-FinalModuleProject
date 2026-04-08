@@ -50,3 +50,84 @@ async function getWeather() {
     container.innerHTML = `${currentTime}: ${currentTemp}°C`; // template literals, which allow us to insert variables into a string.
 }
 
+// CURRENCY (USD -> EUR)
+async function getExchangeRates() {
+    const response = await fetch('https://v6.exchangerate-api.com/v6/654e4290839e7e5bf46b1a39/latest/USD');
+    const data = await response.json();
+
+    const container = document.getElementById('currency-output');
+    container.innerHTML = '';
+
+    const rate = data.conversion_rates.EUR;
+
+    container.innerHTML = `💱 1 USD = ${rate.toFixed(2)} EUR`;
+}
+
+// MOVIES (TMDB - TRENDING)
+async function getMovies() {
+    const response = await fetch('https://api.themoviedb.org/3/trending/movie/week?api_key=76b21021c2918f36c46e296f79b002c4');
+    const data = await response.json();
+
+    const container = document.getElementById('movies-output');
+    container.innerHTML = '';
+
+    // Get top 5 movies
+    data.results.slice(0, 5).forEach(movie => {
+        const div = document.createElement('div');
+        div.textContent = `🎬 ${movie.title}`;
+        container.appendChild(div);
+    });
+}
+
+// GITHUB USER
+async function getGitHubUser() {
+    const username = 'octocat'; // you can change this
+
+    const response = await fetch(`https://api.github.com/users/${username}`);
+    const data = await response.json();
+
+    const container = document.getElementById('github-output');
+    container.innerHTML = '';
+
+    container.innerHTML = `
+        <p>👤 ${data.login}</p>
+        <p>📦 Repos: ${data.public_repos}</p>
+        <p>👥 Followers: ${data.followers}</p>
+    `;
+}
+
+// JOKE 
+async function getJoke() {
+    const response = await fetch('https://v2.jokeapi.dev/joke/Any');
+    const data = await response.json();
+
+    const container = document.getElementById('joke-output');
+    container.innerHTML = '';
+
+    if (data.type === 'single') {
+        container.textContent = data.joke;
+    } else {
+        container.innerHTML = `
+            <p>${data.setup}</p>
+            <p><strong>${data.delivery}</strong></p>
+        `;
+    }
+}
+
+// PUBLIC APIS
+async function getPublicApiInfo() {
+    const container = document.getElementById('publicapi-output');
+    container.innerHTML = '';
+
+    const url = 'https://facebook.com'
+
+    const img = document.createElement('img');
+    img.src = `https://api.screenshotlayer.com/api/capture?access_key=d28555c2cee5f2db9d5fd4ac7d3f3a3d&url=${encodeURIComponent(url)}`
+
+    container.appendChild(img);
+
+}
+
+
+
+
